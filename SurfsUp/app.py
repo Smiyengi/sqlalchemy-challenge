@@ -64,7 +64,21 @@ def precipitation():
     # Query for the date and precipitation for the last year
     precipitation = session.query(Measurement.date, Measurement.prcp).\
         filter(Measurement.date >= year_ago).all()
+    
+    session.close()
+
+    precip = {date: prcp for date, prcp in precipitation}
+    return jsonify(precip)
+
+@app.route("/api/v1.0/stations")
+def stations():
+    """List of stations."""
+    results = session.query(Measurement.station).distinct()
 
     session.close()
 
+    # Unravel results into a 1D array and convert to a list
+    
+    return "text"
+   
 
