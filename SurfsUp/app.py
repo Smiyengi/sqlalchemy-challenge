@@ -72,13 +72,32 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    """List of stations."""
-    results = session.query(Measurement.station).distinct()
+    """Return a list of stations."""
+    results = session.query(Station.station).all()
 
     session.close()
 
     # Unravel results into a 1D array and convert to a list
-    
-    return "text"
+    stations = list(np.ravel(results))
+    return jsonify(stations=stations)
+
+@app.route("/api/v1.0/tobs")
+def temp_monthly():
+    """Return the temperature observations (tobs) for previous year."""
+    # Calculate the date 1 year ago from last date in database
+    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+
+    # Query the primary station for all tobs from the last year
+    results = session.query(Measurement.tobs).\
+        filter(Measurement.station == 'USC00519281').\
+        filter(Measurement.date >= prev_year).all()
+
+    session.close()
+    # Unravel results into a 1D array and convert to a list
+    temps = list(np.ravel(results))
+
+    # Return the results
+    return jsonify(temps=temps)
+
    
 
