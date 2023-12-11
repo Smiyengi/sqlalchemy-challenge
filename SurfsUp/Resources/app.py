@@ -99,6 +99,5 @@ def temp_monthly():
     # Return the results
     return jsonify(temps=temps)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+   
 
